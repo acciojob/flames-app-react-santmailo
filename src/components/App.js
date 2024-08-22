@@ -1,100 +1,92 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import "../styles/App.css";
 
-function App() {
-  const [name1, setName1] = useState("");
-  const [name2, setName2] = useState("");
-  const [result, setResult] = useState("");
+const App = () => {
+  const [input1, setInput1] = useState("");
+  const [input2, setInput2] = useState("");
+  const [relationship, setRelationship] = useState("");
 
-  const calculateRelationship = () => {
-    if (!name1 || !name2) {
-      setResult("Please Enter valid input");
-      return;
-    }
+  function calculateRelationship() {
+    // convert the names to arrays
+    let arr1 = input1.split("");
+    let arr2 = input2.split("");
 
-    let name1Arr = name1.split("");
-    let name2Arr = name2.split("");
-
-    // Remove common letters
-
-    for (let i = 0; i < name1Arr.length; i++) {
-      for (let j = 0; j < name2.length; j++) {
-        if (name1Arr[i] == name2Arr[j]) {
-          name1Arr.splice(i, 1);
-          name2Arr.splice(i, 2);
+    // remove common characters
+    for (let i = 0; i < arr1.length; i++) {
+      for (let j = 0; j < arr2.length; j++) {
+        if (arr1[i] === arr2[j]) {
+          arr1.splice(i, 1);
+          arr2.splice(j, 1);
           i--;
           break;
         }
       }
     }
 
-    const remainingLength = name1Arr.length + name2Arr.length;
-    const flamesResult = remainingLength % 6;
+    // calculate the sum and take modulus by 6
+    const sum = (arr1.length + arr2.length) % 6;
 
-    let relationship;
-    switch (flamesResult) {
+    // determine the relationship status
+    let status;
+    switch (sum) {
       case 1:
-        relationship = "Friends";
+        status = "Friends";
         break;
       case 2:
-        relationship = "Love";
+        status = "Love";
         break;
       case 3:
-        relationship = "Affection";
+        status = "Affection";
         break;
       case 4:
-        relationship = "Marriage";
+        status = "Marriage";
         break;
       case 5:
-        relationship = "Enemy";
+        status = "Enemy";
         break;
       case 0:
-        relationship = "Siblings";
+        status = "Siblings";
         break;
       default:
-        relationship = "Please Enter valid input";
+        status = "Please Enter valid input";
     }
+    setRelationship(status);
+  }
 
-    setResult(relationship);
-  };
-
-  const clearFields = () => {
-    setName1("");
-    setName2("");
-    setResult("");
+  const clearInputs = () => {
+    setInput1("");
+    setInput2("");
+    setRelationship("");
   };
 
   return (
     <div id="main">
-      {/* Do not remove the main div */}
       <input
         type="text"
-        placeholder="Enter First Name"
         data-testid="input1"
-        onChange={(e) => setName1(e.target.value)}
-        id="input1"
-        value={name1}
+        name="name1"
+        value={input1}
+        onChange={(e) => setInput1(e.target.value)}
       />
       <input
         type="text"
-        placeholder="Enter Second Name"
         data-testid="input2"
-        id="input2"
-        onChange={(e) => setName2(e.target.value)}
-        value={name2}
+        name="name2"
+        value={input2}
+        onChange={(e) => setInput2(e.target.value)}
       />
       <button
-        onClick={calculateRelationship}
         data-testid="calculate_relationship"
+        onClick={calculateRelationship}
       >
         Calculate Relationship Future
       </button>
-      <button data-testid="clear" onClick={clearFields}>
+      <button data-testid="clear" onClick={clearInputs}>
         Clear
       </button>
-      <h3 data-testid="answer">{result}</h3>
+      <h3 data-testid="answer"> {relationship}</h3>
     </div>
   );
-}
+};
 
 export default App;
