@@ -16,13 +16,17 @@ function App() {
     let name2Arr = name2.split("");
 
     // Remove common letters
-    name1Arr.forEach((char) => {
-      const indexInName2 = name2Arr.indexOf(char);
-      if (indexInName2 !== -1) {
-        name2Arr.splice(indexInName2, 1);
-        name1Arr = name1Arr.filter((c) => c !== char);
+
+    for (let i = 0; i < name1Arr.length; i++) {
+      for (let j = 0; j < name2.length; j++) {
+        if (name1Arr[i] == name2Arr[j]) {
+          name1Arr.splice(i, 1);
+          name2Arr.splice(i, 2);
+          i--;
+          break;
+        }
       }
-    });
+    }
 
     const remainingLength = name1Arr.length + name2Arr.length;
     const flamesResult = remainingLength % 6;
@@ -55,8 +59,6 @@ function App() {
   };
 
   const clearFields = () => {
-    document.getElementById("input1").value = "";
-    document.getElementById("input2").value = "";
     setName1("");
     setName2("");
     setResult("");
@@ -71,6 +73,7 @@ function App() {
         data-testid="input1"
         onChange={(e) => setName1(e.target.value)}
         id="input1"
+        value={name1}
       />
       <input
         type="text"
@@ -78,6 +81,7 @@ function App() {
         data-testid="input2"
         id="input2"
         onChange={(e) => setName2(e.target.value)}
+        value={name2}
       />
       <button
         onClick={calculateRelationship}
